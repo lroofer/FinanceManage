@@ -17,6 +17,8 @@
 		0A76FCB02AA1D99700531047 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FCAF2AA1D99700531047 /* Account.swift */; };
 		0A76FCB22AA3534900531047 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FCB12AA3534900531047 /* MainView.swift */; };
 		0A76FCB42AA3622100531047 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FCB32AA3622100531047 /* Extensions.swift */; };
+		0A76FCB62AA371AE00531047 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FCB52AA371AE00531047 /* Transaction.swift */; };
+		0A76FCB82AA39EA100531047 /* PayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FCB72AA39EA100531047 /* PayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +33,8 @@
 		0A76FCAF2AA1D99700531047 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		0A76FCB12AA3534900531047 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		0A76FCB32AA3622100531047 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		0A76FCB52AA371AE00531047 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		0A76FCB72AA39EA100531047 /* PayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +53,8 @@
 			children = (
 				0A76FCB32AA3622100531047 /* Extensions.swift */,
 				0A76FCB12AA3534900531047 /* MainView.swift */,
+				0A76FCB72AA39EA100531047 /* PayView.swift */,
+				0A76FCB52AA371AE00531047 /* Transaction.swift */,
 				0A76FC9A2AA0E55E00531047 /* FinanceManage */,
 				0A76FC992AA0E55E00531047 /* Products */,
 			);
@@ -158,11 +164,13 @@
 				0A76FCAC2AA0E5E000531047 /* Wallet.swift in Sources */,
 				0A76FCB22AA3534900531047 /* MainView.swift in Sources */,
 				0A76FC9E2AA0E55E00531047 /* ContentView.swift in Sources */,
+				0A76FCB82AA39EA100531047 /* PayView.swift in Sources */,
 				0A76FCB42AA3622100531047 /* Extensions.swift in Sources */,
 				0A76FC9C2AA0E55E00531047 /* FinanceManageApp.swift in Sources */,
 				0A76FCAA2AA0E58500531047 /* User.swift in Sources */,
 				0A76FCAE2AA1D55F00531047 /* AddUser.swift in Sources */,
 				0A76FCB02AA1D99700531047 /* Account.swift in Sources */,
+				0A76FCB62AA371AE00531047 /* Transaction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
