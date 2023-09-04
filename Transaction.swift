@@ -34,11 +34,16 @@ class UserTransactions: Codable, ObservableObject {
     }
 }
 
-struct Transaction: Codable, Identifiable {
+struct Transaction: Codable, Identifiable, Comparable {
+    static func < (lhs: Transaction, rhs: Transaction) -> Bool {
+        lhs.date > rhs.date
+    }
+    
     static let categories = ["Shop", "Transition", "Home", "Commute", "Entertain"]
     var id = UUID()
     var name: String
     var category: String
     var sum: Decimal
+    var date: Date
     var cashback: Decimal?
 }

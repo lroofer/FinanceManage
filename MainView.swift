@@ -26,7 +26,7 @@ struct Tile: View {
             Text(second)
                 .font(.headline)
         }
-        .frame(width: 115, height: 115)
+        .frame(width: 180, height: 115)
         .background(.thickMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
@@ -94,10 +94,18 @@ struct MainView: View {
                     VStack (alignment: .center) {
                         HStack {
                             VStack(alignment: .leading) {
-                                Text("\(daily.show()) rubles")
-                                    .font(.largeTitle.bold())
-                                Text("\(dailyTop.show()) rubles")
-                                    .font(.body)
+                                HStack(spacing: 5) {
+                                    Text("\(daily.show())")
+                                    Image(systemName: "rublesign")
+                                        .font(.title.bold())
+                                }
+                                .font(.largeTitle.bold())
+                                HStack(spacing: 2) {
+                                    Text("\(dailyTop.show())")
+                                    Image(systemName: "rublesign")
+                                        .font(.caption)
+                                }
+                                .font(.body)
                             }
                             Spacer()
                             Button {
@@ -119,15 +127,23 @@ struct MainView: View {
                                     VStack(alignment: .leading) {
                                         Text(bank.bankName)
                                             .font(.title2.bold())
-                                        Text("\(bank.balance.show()) ruble\(bank.balance == 1 ? "" : "s")")
-                                            .font(.headline)
-                                        Text("+ \(bank.cashback.show()) ruble\(bank.cashback == 1 ? "" : "s")")
-                                            .font(.subheadline)
+                                        HStack (spacing: 3) {
+                                            Text("\(bank.balance.show())")
+                                                .font(.headline)
+                                            Image(systemName: "rublesign")
+                                                .font(.subheadline)
+                                        }
+                                        HStack (spacing: 1) {
+                                            Text("+ \(bank.cashback.show())")
+                                                .font(.subheadline)
+                                            Image(systemName: "rublesign")
+                                                .font(.caption)
+                                        }
                                     }
-                                    .frame(width: 120, height: 120)
+                                    .frame(width: 180, height: 120)
                                     .background(.thickMaterial)
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                                    .padding(.leading)
+                                    .padding(.leading, 8)
                                 }
                                 Button {
                                     
@@ -145,27 +161,26 @@ struct MainView: View {
                             
                         }
                         .padding(.vertical)
-                        HStack (spacing: 15) {
-                            Tile(first: "In \(daysLeft)", second: "day\(daysLeft == 1 ? "" : "s") is inflow")
-                            Tile(first: total.show(), second: "total")
-                            Tile(first: totalCash.show(), second: "cashback")
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack (spacing: 15) {
+                                Tile(first: "In \(daysLeft)", second: "day\(daysLeft == 1 ? "" : "s") is inflow")
+                                    .padding(.leading, 8)
+                                Tile(first: total.show(), second: "total")
+                                Tile(first: totalCash.show(), second: "cashback")
+                                    .padding(.trailing, 8)
+                            }
                         }
                         .padding(.bottom)
                         HStack (spacing: 15) {
                             Button {
                                 
                             } label: {
-                                Tile(first: "Upd", second: "Cashback")
+                                Tile(first: "Update", second: "Cashback")
                             }
                             Button {
                                 showPay.toggle()
                             } label: {
                                 Tile(first: "Pay", second: "Add item")
-                            }
-                            Button {
-                                
-                            } label: {
-                                Tile(first: "Coin", second: "Transfer")
                             }
                         }
                         .padding(.bottom)
@@ -209,6 +224,6 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 17, cashback: 12)]), inflow: Date.now), ops: UserTransactions(all: [Transaction(name: "Пятерочка", category: "Supermarket", sum: 124, cashback: 10), Transaction(name: "Ozon", category: "Home", sum: 95), Transaction(name: "Transfer", category: "Transitions", sum: 100)]))
+        MainView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 36000, cashback: 1741)]), inflow: Date.now), ops: UserTransactions(all: [Transaction(name: "Пятерочка", category: "Supermarket", sum: 2124, date: Date.now, cashback: 10), Transaction(name: "Ozon", category: "Home", sum: 95, date: Date.now), Transaction(name: "Transfer", category: "Transitions", sum: 1000, date: Date.now)]))
     }
 }

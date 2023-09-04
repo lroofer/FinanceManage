@@ -23,6 +23,7 @@ struct PayView: View {
     @State private var valueSum = 0
     @State private var transactionName = "State shop"
     @State private var cattegory = Transaction.categories[0]
+    @State private var errorMessage: String? = nil
     private var actualValue: Decimal {
         Decimal(valueSum) / 100
     }
@@ -93,21 +94,13 @@ struct PayView: View {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.gray.opacity(0.3), lineWidth: 2)
                         }
-                        
-                        
+                        if errorMessage != nil {
+                            Text(errorMessage!)
+                                .foregroundColor(.red)
+                                .font(.title.bold())
+                        }
                     }
                     .padding(10)
-                    Rectangle()
-                        .frame(width: 0, height: 40)
-                    Text("Pay")
-                        .fontWeight(.bold)
-                        .padding(30)
-                        .frame(width: 180, height: 50)
-                        .background(.yellow)
-                        .cornerRadius(20)
-                        .onTapGesture {
-                            print(actualValue)
-                        }
                 }
                 .toolbar {
                     ToolbarItemGroup(placement: .navigationBarLeading) {
@@ -117,8 +110,16 @@ struct PayView: View {
                     }
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         Button("Pay") {
-                            dismiss()
+                            errorMessage = nil
+                            ops.all.append(Transaction(name: transactionName, category: cattegory, sum: actualValue, date: selectedDate))
+                            ops.all.sort()
+                            if let encoded = try? JSONEncoder().encode(ops) {
+                                UserDefaults.standard.setValue(encoded, forKey: "transactions")
+                                dismiss()
+                            }
+                            errorMessage = "Can't encode data"
                         }
+                        .buttonStyle(.borderedProminent)
                     }
                 }
                 .navigationTitle("Add new payment")
