@@ -38,8 +38,8 @@ struct MainView: View {
     @State private var today = Date.now
     @State private var showPay = false
     private var daysLeft: Int {
-        let dT = Int(today.formatted(date: .numeric, time: .omitted).split(separator: "/")[1]) ?? 1
-        var dD = Int(user.inflow?.formatted(date: .numeric, time: .omitted).split(separator: "/")[1] ?? "0") ?? 12
+        let dT = today.get(.day)
+        var dD = user.inflow?.get(.day) ?? 12
         let dMonth = getDaysInMonth()
         dD = min(dD, dMonth)
         return (dT <= dD ? dD - dT + 1 : dMonth - dT + 1 + dD)
@@ -94,9 +94,9 @@ struct MainView: View {
                     VStack (alignment: .center) {
                         HStack {
                             VStack(alignment: .leading) {
-                                Text("\(daily.formatted()) rubles")
+                                Text("\(daily.show()) rubles")
                                     .font(.largeTitle.bold())
-                                Text("\(dailyTop.formatted()) rubles")
+                                Text("\(dailyTop.show()) rubles")
                                     .font(.body)
                             }
                             Spacer()
@@ -119,9 +119,9 @@ struct MainView: View {
                                     VStack(alignment: .leading) {
                                         Text(bank.bankName)
                                             .font(.title2.bold())
-                                        Text("\(bank.balance.formatted()) ruble\(bank.balance == 1 ? "" : "s")")
+                                        Text("\(bank.balance.show()) ruble\(bank.balance == 1 ? "" : "s")")
                                             .font(.headline)
-                                        Text("+ \(bank.cashback.formatted()) ruble\(bank.cashback == 1 ? "" : "s")")
+                                        Text("+ \(bank.cashback.show()) ruble\(bank.cashback == 1 ? "" : "s")")
                                             .font(.subheadline)
                                     }
                                     .frame(width: 120, height: 120)
@@ -147,8 +147,8 @@ struct MainView: View {
                         .padding(.vertical)
                         HStack (spacing: 15) {
                             Tile(first: "In \(daysLeft)", second: "day\(daysLeft == 1 ? "" : "s") is inflow")
-                            Tile(first: total.formatted(), second: "total")
-                            Tile(first: totalCash.formatted(), second: "cashback")
+                            Tile(first: total.show(), second: "total")
+                            Tile(first: totalCash.show(), second: "cashback")
                         }
                         .padding(.bottom)
                         HStack (spacing: 15) {
@@ -187,9 +187,9 @@ struct MainView: View {
                                     }
                                     Spacer()
                                     VStack {
-                                        Text(trans.sum.formatted())
+                                        Text(trans.sum.show())
                                             .font(.title3.bold())
-                                        Text("+ \(trans.cashback?.formatted() ?? "N")")
+                                        Text("+ \(trans.cashback?.show() ?? "N")")
                                     }
                                 }
                                 .padding()

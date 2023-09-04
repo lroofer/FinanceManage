@@ -14,63 +14,122 @@ struct PayView: View {
     let sumCash: Decimal
     let daysLeft: Int
     var sumLeft: Decimal {
-        sum / Decimal(daysLeft)
+        (sum - actualValue) / Decimal(daysLeft)
     }
     var sumCashLeft: Decimal {
-        sumCash / Decimal(daysLeft)
+        (sumCash - actualValue) / Decimal(daysLeft)
     }
     @State private var selectedDate = Date.now
-    
+    @State private var valueSum = 0
+    @State private var transactionName = "State shop"
+    @State private var cattegory = Transaction.categories[0]
+    private var actualValue: Decimal {
+        Decimal(valueSum) / 100
+    }
     var body: some View {
         NavigationView {
-            VStack {
-                HStack {
-                    if selectedDate.getDay() == Date.now.getDay() && selectedDate.getMonth() == Date.now.getMonth() && selectedDate.getYear() == Date.now.getYear() {
-                        VStack(alignment: .leading) {
-                            Text(selectedDate.getDay())
-                                .font(.title.bold())
-                            Text(selectedDate.getMonth())
+            ScrollView {
+                VStack {
+                    HStack {
+                        VStack {
+                            if selectedDate.get(.day, .month, .year) == Date.now.get(.day, .month, .year) {
+                                Text("\(selectedDate.get(.day))")
+                                    .font(.title.bold())
+                                Text(selectedDate.get(.month).convertToMonth())
+                            } else {
+                                Image(systemName: "clock.badge.questionmark")
+                                    .resizable()
+                                    .frame(width: 45, height: 40)
+                                
+                            }
                         }
-                    } else {
+                        Spacer()
                         VStack(alignment: .leading) {
-                            Text("-")
-                                .font(.title.bold())
-                            Text("-")
+                            Text(sumLeft.show())
+                                .font(.largeTitle.bold())
+                                .foregroundColor(sumLeft < 0 ? .red : .black)
+                            Text("-> \(sumCashLeft.show())")
+                                .font(.headline.bold())
                         }
                     }
-                    Spacer()
-                    VStack(alignment: .leading) {
-                        Text(sumLeft.formatted(.currency(code: Locale.current.identifier)))
-                            .font(.largeTitle.bold())
-                        Text("-> \(sumCashLeft.formatted(.currency(code: Locale.current.identifier)))")
-                            .font(.headline.bold())
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(.ultraThinMaterial)
+                    VStack {
+                        HStack {
+                            TextFieldPro(value: $valueSum)
+                            Image(systemName: "rublesign")
+                        }
+                        .padding(20)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 2)
+                        }
+                        .frame(height: 100)
+                        .font(.largeTitle.bold())
+                        DatePicker("Transaction time", selection: $selectedDate)
+                            .fontWeight(.bold)
+                            .padding(10)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color.gray.opacity(0.3), lineWidth: 2)
+                            }
+                        HStack {
+                            TextField("Name", text: $transactionName)
+                            Picker("Category", selection: $cattegory) {
+                                ForEach(Transaction.categories, id:\.self) { item in
+                                    HStack {
+                                        Image(systemName: "cart")
+                                        Rectangle()
+                                            .frame(width:50, height: 0)
+                                        Text(item)
+                                    }
+                                }
+                            }
+                        }
+                        .fontWeight(.bold)
+                        .padding(10)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 2)
+                        }
+                        
+                        
+                    }
+                    .padding(10)
+                    Rectangle()
+                        .frame(width: 0, height: 40)
+                    Text("Pay")
+                        .fontWeight(.bold)
+                        .padding(30)
+                        .frame(width: 180, height: 50)
+                        .background(.yellow)
+                        .cornerRadius(20)
+                        .onTapGesture {
+                            print(actualValue)
+                        }
+                }
+                .toolbar {
+                    ToolbarItemGroup(placement: .navigationBarLeading) {
+                        Button("Cancel") {
+                            dismiss()
+                        }
+                    }
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        Button("Pay") {
+                            dismiss()
+                        }
                     }
                 }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(.ultraThinMaterial)
-                
-            }
-            .toolbar {
-                ToolbarItemGroup(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-            }
-            .navigationTitle("Pay")
+                .navigationTitle("Add new payment")
             .navigationBarTitleDisplayMode(.inline)
+            }
         }
     }
 }
 
 struct PayView_Previews: PreviewProvider {
     static var previews: some View {
-        PayView(ops: UserTransactions(all: [Transaction]()), sum: 1007, sumCash: 2003, daysLeft: 10)
+        PayView(ops: UserTransactions(all: [Transaction]()), sum: 35007, sumCash: 2003, daysLeft: 30)
     }
 }

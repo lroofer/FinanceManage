@@ -8,13 +8,50 @@
 import Foundation
 
 extension Date {
-    func getDay() -> String {
-        return self.formatted(date: .abbreviated, time: .omitted).components(separatedBy: " ")[0]
+    func get(_ components: Calendar.Component..., calendar: Calendar = Calendar.current) -> DateComponents {
+            return calendar.dateComponents(Set(components), from: self)
+        }
+
+    func get(_ component: Calendar.Component, calendar: Calendar = Calendar.current) -> Int {
+        return calendar.component(component, from: self)
     }
-    func getMonth() -> String {
-        return self.formatted(date: .abbreviated, time: .omitted).components(separatedBy: " ")[1]
+}
+
+extension Decimal {
+    func show() -> String {
+        return self.formatted(.number.precision(.fractionLength(1)))
     }
-    func getYear() -> String {
-        return self.formatted(date: .abbreviated, time: .omitted).components(separatedBy: " ")[2]
+}
+
+extension Int {
+    func convertToMonth() -> String {
+        switch self {
+        case 1:
+            return "Jan"
+        case 2:
+            return "Feb"
+        case 3:
+            return "Mar"
+        case 4:
+            return "Apr"
+        case 5:
+            return "May"
+        case 6:
+            return "Jun"
+        case 7:
+            return "Jul"
+        case 8:
+            return "Aug"
+        case 9:
+            return "Sep"
+        case 10:
+            return "Oct"
+        case 11:
+            return "Nov"
+        case 12:
+            return "Dec"
+        default:
+            return "N/A"
+        }
     }
 }

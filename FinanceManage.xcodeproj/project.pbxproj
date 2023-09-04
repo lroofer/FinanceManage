@@ -19,6 +19,8 @@
 		0A76FCB42AA3622100531047 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FCB32AA3622100531047 /* Extensions.swift */; };
 		0A76FCB62AA371AE00531047 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FCB52AA371AE00531047 /* Transaction.swift */; };
 		0A76FCB82AA39EA100531047 /* PayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FCB72AA39EA100531047 /* PayView.swift */; };
+		0A76FCBA2AA60ABB00531047 /* TextFieldPro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FCB92AA60ABB00531047 /* TextFieldPro.swift */; };
+		0A76FCBE2AA60F1F00531047 /* UITextFieldPro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FCBD2AA60F1F00531047 /* UITextFieldPro.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,8 @@
 		0A76FCB32AA3622100531047 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		0A76FCB52AA371AE00531047 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		0A76FCB72AA39EA100531047 /* PayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayView.swift; sourceTree = "<group>"; };
+		0A76FCB92AA60ABB00531047 /* TextFieldPro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldPro.swift; sourceTree = "<group>"; };
+		0A76FCBD2AA60F1F00531047 /* UITextFieldPro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldPro.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +55,7 @@
 		0A76FC8F2AA0E55E00531047 = {
 			isa = PBXGroup;
 			children = (
+				0A76FCC02AA6117500531047 /* CurrencyTextField */,
 				0A76FCB32AA3622100531047 /* Extensions.swift */,
 				0A76FCB12AA3534900531047 /* MainView.swift */,
 				0A76FCB72AA39EA100531047 /* PayView.swift */,
@@ -89,6 +94,15 @@
 				0A76FCA22AA0E56000531047 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		0A76FCC02AA6117500531047 /* CurrencyTextField */ = {
+			isa = PBXGroup;
+			children = (
+				0A76FCB92AA60ABB00531047 /* TextFieldPro.swift */,
+				0A76FCBD2AA60F1F00531047 /* UITextFieldPro.swift */,
+			);
+			path = CurrencyTextField;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -171,6 +185,8 @@
 				0A76FCAE2AA1D55F00531047 /* AddUser.swift in Sources */,
 				0A76FCB02AA1D99700531047 /* Account.swift in Sources */,
 				0A76FCB62AA371AE00531047 /* Transaction.swift in Sources */,
+				0A76FCBA2AA60ABB00531047 /* TextFieldPro.swift in Sources */,
+				0A76FCBE2AA60F1F00531047 /* UITextFieldPro.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
