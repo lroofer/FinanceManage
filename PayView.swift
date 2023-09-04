@@ -9,16 +9,21 @@ import SwiftUI
 
 struct PayView: View {
     @Environment(\.dismiss) var dismiss
+    @ObservedObject var user: User
     @ObservedObject var ops: UserTransactions
     let sum: Decimal
     let sumCash: Decimal
     let daysLeft: Int
     var sumLeft: Decimal {
-        (sum - actualValue) / Decimal(daysLeft)
+        (sum / Decimal(daysLeft)) - actualValue
     }
     var sumCashLeft: Decimal {
-        (sumCash - actualValue) / Decimal(daysLeft)
+        ((sumCash + sum) / Decimal(daysLeft)) - actualValue
     }
+    var reconsider: Decimal {
+        (sum - actualValue) / Decimal(daysLeft)
+    }
+    @State var account: Account
     @State private var selectedDate = Date.now
     @State private var valueSum = 0
     @State private var transactionName = "State shop"
@@ -48,7 +53,7 @@ struct PayView: View {
                         VStack(alignment: .leading) {
                             Text(sumLeft.show())
                                 .font(.largeTitle.bold())
-                                .foregroundColor(sumLeft < 0 ? .red : .black)
+                                .foregroundColor(sumLeft < 0 ? .red : .primary)
                             Text("-> \(sumCashLeft.show())")
                                 .font(.headline.bold())
                         }
@@ -94,10 +99,39 @@ struct PayView: View {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.gray.opacity(0.3), lineWidth: 2)
                         }
+                        HStack {
+                            Text("Account")
+                            Spacer()
+                            Picker("Account", selection: $account) {
+                                ForEach(user.wallet!.accounts) { item in
+                                    Text("\(item.bankName) \(item.balance.show())")
+                                }
+                            }
+                        }
+                        .fontWeight(.bold)
+                        .padding(10)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 2)
+                        }
                         if errorMessage != nil {
                             Text(errorMessage!)
                                 .foregroundColor(.red)
                                 .font(.title.bold())
+                        }
+                        if sumLeft < 0 && reconsider > 0 {
+                            Text("New goal: \(reconsider.show())")
+                                .foregroundColor(.red)
+                                .font(.title.bold())
+                        } else if sumLeft < 0 && reconsider <= 0 {
+                            Text("Out of money")
+                                .foregroundColor(.red)
+                                .font(.title.bold())
+                                .padding(10)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .stroke(Color.red.opacity(0.6), lineWidth: 2)
+                                }
                         }
                     }
                     .padding(10)
@@ -111,9 +145,25 @@ struct PayView: View {
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         Button("Pay") {
                             errorMessage = nil
+                            if (reconsider < 0) {
+                                return
+                            }
+                            if actualValue == 0 {
+                                errorMessage = "Can't be zero"
+                                return
+                            }
+                            if account.balance < actualValue {
+                                errorMessage = "Not enough money on the balance of selected account"
+                                return
+                            }
+                            for item in user.wallet!.accounts {
+                                if item.id == account.id {
+                                    item.balance -= actualValue
+                                }
+                            }
                             ops.all.append(Transaction(name: transactionName, category: cattegory, sum: actualValue, date: selectedDate))
                             ops.all.sort()
-                            if let encoded = try? JSONEncoder().encode(ops) {
+                            if let encoded = try? JSONEncoder().encode(ops.all) {
                                 UserDefaults.standard.setValue(encoded, forKey: "transactions")
                                 dismiss()
                             }
@@ -131,6 +181,6 @@ struct PayView: View {
 
 struct PayView_Previews: PreviewProvider {
     static var previews: some View {
-        PayView(ops: UserTransactions(all: [Transaction]()), sum: 35007, sumCash: 2003, daysLeft: 30)
+        PayView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 13232, cashback: 123)]), inflow: Date.now), ops: UserTransactions(all: [Transaction]()), sum: 35007, sumCash: 2003, daysLeft: 30, account: Account(bankName: "Tinkoff", balance: 13232, cashback: 123))
     }
 }

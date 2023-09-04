@@ -7,7 +7,14 @@
 
 import Foundation
 
-class Account: Codable, ObservableObject, Identifiable {
+class Account: Codable, ObservableObject, Identifiable, Hashable {
+    static func == (lhs: Account, rhs: Account) -> Bool {
+        lhs.id == rhs.id
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(bankName)
+        hasher.combine(balance)
+    }
     enum CodingKeys: CodingKey {
         case bankName
         case balance

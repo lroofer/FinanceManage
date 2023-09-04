@@ -85,6 +85,14 @@ struct MainView: View {
         }
         return sum
     }
+    private func getAccounts() -> [(String, Decimal)] {
+        var ans = [(String, Decimal)]()
+        for i in user.wallet!.accounts {
+            ans.append((i.bankName, i.balance))
+        }
+        return ans
+    }
+    
     var body: some View {
         ZStack {
             LinearGradient(colors: [.teal, .orange], startPoint: .topLeading, endPoint: .bottomTrailing)
@@ -175,7 +183,7 @@ struct MainView: View {
                             Button {
                                 
                             } label: {
-                                Tile(first: "Update", second: "Cashback")
+                                Tile(first: "Share", second: "in")
                             }
                             Button {
                                 showPay.toggle()
@@ -216,7 +224,7 @@ struct MainView: View {
                 }
             }
             .sheet(isPresented: $showPay) {
-                PayView(ops: ops, sum: total, sumCash: totalCash, daysLeft: daysLeft)
+                PayView(user: user, ops: ops, sum: total, sumCash: totalCash, daysLeft: daysLeft, account: user.wallet!.accounts[0])
             }
         }
     }
