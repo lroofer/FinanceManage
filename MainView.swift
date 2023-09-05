@@ -37,7 +37,7 @@ struct MainView: View {
     @StateObject var ops = UserTransactions()
     @State private var today = Date.now
     @State private var showPay = false
-    @State private var selectedTrans = Transaction(name: "", category: "", sum: 12, date: Date.now)
+    @State private var selectedTrans = Transaction(name: "", category: "", sum: 12, date: Date.now, transactionID: "test")
     @State private var showTrans = false
     private var daysLeft: Int {
         let dT = today.get(.day)
@@ -242,7 +242,7 @@ struct MainView: View {
                 PayView(user: user, ops: ops, sum: total, sumCash: totalCash, daysLeft: daysLeft, account: user.wallet!.accounts[0])
             }
             .sheet(isPresented: $showTrans) {
-                TransactionEditView(user: user, account: user.wallet!.accounts[0] ,ops: ops, sumTotal: total, daysLeft: daysLeft, id: selectedTrans.id, name: selectedTrans.name, category: selectedTrans.category, writtenSum: selectedTrans.sum, date: selectedTrans.date)
+                TransactionEditView(user: user, opId: selectedTrans.transactionID ,ops: ops, sumTotal: total, daysLeft: daysLeft, id: selectedTrans.id, name: selectedTrans.name, category: selectedTrans.category, writtenSum: selectedTrans.sum, date: selectedTrans.date)
             }
         }
     }
@@ -250,6 +250,6 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 36000, cashback: 1741)]), inflow: Date.now), ops: UserTransactions(all: [Transaction(name: "Пятерочка", category: "Supermarket", sum: 2124, date: Date.now), Transaction(name: "Ozon", category: "Home", sum: 95, date: Date.now), Transaction(name: "Transfer", category: "Transitions", sum: 1000, date: Date.now)]))
+        MainView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 36000, cashback: 1741)]), inflow: Date.now), ops: UserTransactions(all: [Transaction(name: "Пятерочка", category: "Supermarket", sum: 2124, date: Date.now, transactionID: "test1"), Transaction(name: "Ozon", category: "Home", sum: 95, date: Date.now, transactionID: "test2"), Transaction(name: "Transfer", category: "Transitions", sum: 1000, date: Date.now, transactionID: "test4")]))
     }
 }

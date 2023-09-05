@@ -14,6 +14,7 @@ class Account: Codable, ObservableObject, Identifiable, Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(bankName)
         hasher.combine(balance)
+        hasher.combine(id)
     }
     enum CodingKeys: CodingKey {
         case bankName

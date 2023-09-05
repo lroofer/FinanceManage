@@ -45,4 +45,5 @@ struct Transaction: Codable, Identifiable, Comparable {
     var category: String
     var sum: Decimal
     var date: Date
+    var transactionID: String
 }

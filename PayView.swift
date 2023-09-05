@@ -111,7 +111,7 @@ struct PayView: View {
                             Text("Account")
                             Spacer()
                             Picker("Account", selection: $account) {
-                                ForEach(user.wallet!.accounts) { item in
+                                ForEach(user.wallet!.accounts, id: \.self) { item in
                                     Text("\(item.bankName) \(item.balance.show())")
                                 }
                             }
@@ -167,6 +167,7 @@ struct PayView: View {
                             for item in user.wallet!.accounts {
                                 if item.id == account.id {
                                     item.balance -= actualValue
+                                    break
                                 }
                             }
                             if let encoded = try? JSONEncoder().encode(user) {
@@ -174,7 +175,7 @@ struct PayView: View {
                             } else {
                                 fatalError("Cannot encode user")
                             }
-                            ops.all.append(Transaction(name: transactionName, category: cattegory, sum: actualValue, date: selectedDate))
+                            ops.all.append(Transaction(name: transactionName, category: cattegory, sum: actualValue, date: selectedDate, transactionID: account.id.uuidString))
                             ops.all.sort()
                             if let encoded = try? JSONEncoder().encode(ops.all) {
                                 UserDefaults.standard.setValue(encoded, forKey: "transactions")
@@ -194,6 +195,6 @@ struct PayView: View {
 
 struct PayView_Previews: PreviewProvider {
     static var previews: some View {
-        PayView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 13232, cashback: 123)]), inflow: Date.now), ops: UserTransactions(all: [Transaction]()), sum: 35007, sumCash: 2003, daysLeft: 30, account: Account(bankName: "Tinkoff", balance: 13232, cashback: 123))
+        PayView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 13232, cashback: 123), Account(bankName: "Alfa", balance: 141000, cashback: 1221)]), inflow: Date.now), ops: UserTransactions(all: [Transaction]()), sum: 35007, sumCash: 2003, daysLeft: 30, account: Account(bankName: "Tinkoff", balance: 13232, cashback: 123))
     }
 }

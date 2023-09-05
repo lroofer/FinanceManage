@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TransactionEditView: View {
     @ObservedObject private var user: User
-    @State var account: Account
+    @State var account: Account? = nil
     var ops: UserTransactions
     let sumTotal: Decimal
     let daysLeft: Int
@@ -28,17 +28,23 @@ struct TransactionEditView: View {
     @State private var alertShow = false
     @State private var alertMessage = ""
     @State private var paddingValue: CGFloat = 0
+    private let opId: String
     private var accountSum: Decimal {
-        account.balance - sum + initialValue
+        (account?.balance ?? 0) - sum + initialValue
     }
     let initialValue: Decimal
-    init(user: User, account: Account, ops: UserTransactions, sumTotal: Decimal, daysLeft: Int, id: UUID, name: String, category: String, writtenSum: Decimal, date: Date) {
+    init(user: User, opId: String, ops: UserTransactions, sumTotal: Decimal, daysLeft: Int, id: UUID, name: String, category: String, writtenSum: Decimal, date: Date) {
         self.user = user
         self.ops = ops
         self.sumTotal = sumTotal
         self.daysLeft = daysLeft
         self.id = id
-        _account = State(initialValue: account)
+        self.opId = opId
+        for i in user.wallet!.accounts {
+            if i.id.uuidString == opId {
+                _account = State(initialValue: i)
+            }
+        }
         _name = State(initialValue: name)
         _category = State(initialValue: category)
         _writtenSum = State(initialValue: Int(truncating: writtenSum * 100 as NSDecimalNumber))
@@ -61,6 +67,7 @@ struct TransactionEditView: View {
                             }
                         }
                     }
+                    .disabled(account == nil)
                     .padding()
                     .overlay {
                         RoundedRectangle(cornerRadius: 15)
@@ -72,6 +79,7 @@ struct TransactionEditView: View {
                         Image(systemName: "rublesign")
                             .font(.title.bold())
                     }
+                    .disabled(account == nil)
                     .padding()
                     .overlay {
                         RoundedRectangle(cornerRadius: 15)
@@ -79,6 +87,7 @@ struct TransactionEditView: View {
                     }
                     .padding(8)
                     DatePicker("Purchase time", selection: $date)
+                        .disabled(account == nil)
                         .fontWeight(.bold)
                         .padding()
                         .overlay {
@@ -91,25 +100,39 @@ struct TransactionEditView: View {
                             .font(.headline)
                             .foregroundColor(reconsider < 0 ? .red : .primary)
                         Spacer()
-                        Text("\(account.bankName) \(accountSum.show())")
-                            .fontWeight(.bold)
-                            .padding(8)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(accountSum > 0 ? Color.blue.opacity(0.5) : Color.red.opacity(0.8), lineWidth: 2)
-                            }
-                            .onTapGesture {
-                                alertMessage = "Can't change payment account yet"
-                                alertShow = true
-                            }
-                            .alert(isPresented: $alertShow) {
-                                Alert(title: Text(alertMessage))
-                            }
+                        if account != nil {
+                            Text("\(account!.bankName) \(accountSum.show())")
+                                .fontWeight(.bold)
+                                .padding(8)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(accountSum > 0 ? Color.blue.opacity(0.5) : Color.red.opacity(0.8), lineWidth: 2)
+                                }
+                                .onTapGesture {
+                                    alertMessage = "Can't change payment account yet"
+                                    alertShow = true
+                                }
+                        } else {
+                            Text("Archived account")
+                                .fontWeight(.bold)
+                                .padding(8)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.gray.opacity(0.4), lineWidth: 2)
+                                }
+                                .onTapGesture {
+                                    alertMessage = "Account was changed or deleted"
+                                    alertShow = true
+                                }
+                        }
                     }
                     .padding()
                     .overlay {
                         RoundedRectangle(cornerRadius: 15)
                             .stroke(Color.gray.opacity(0.3), lineWidth: 2)
+                    }
+                    .alert(isPresented: $alertShow) {
+                        Alert(title: Text(alertMessage))
                     }
                     .padding(8)
                     VStack {
@@ -121,13 +144,15 @@ struct TransactionEditView: View {
                                 }
                             }
                             ops.all.sort()
-                            for i in 0..<user.wallet!.accounts.count {
-                                if user.wallet!.accounts[i].id == account.id {
-                                    user.wallet!.accounts[i].balance += initialValue
+                            if account != nil {
+                                for i in 0..<user.wallet!.accounts.count {
+                                    if user.wallet!.accounts[i].id == account!.id {
+                                        user.wallet!.accounts[i].balance += initialValue
+                                    }
                                 }
-                            }
-                            if let encoded = try? JSONEncoder().encode(user) {
-                                UserDefaults.standard.set(encoded, forKey: "user")
+                                if let encoded = try? JSONEncoder().encode(user) {
+                                    UserDefaults.standard.set(encoded, forKey: "user")
+                                }
                             }
                             if let encoded = try? JSONEncoder().encode(ops.all) {
                                 UserDefaults.standard.set(encoded, forKey: "transactions")
@@ -167,13 +192,15 @@ struct TransactionEditView: View {
                                 alertShow = true
                                 return
                             }
-                            for i in 0..<user.wallet!.accounts.count {
-                                if user.wallet!.accounts[i].id == account.id {
-                                    user.wallet!.accounts[i].balance = accountSum
+                            if account != nil {
+                                for i in 0..<user.wallet!.accounts.count {
+                                    if user.wallet!.accounts[i].id == account!.id {
+                                        user.wallet!.accounts[i].balance = accountSum
+                                    }
                                 }
-                            }
-                            if let encoded = try? JSONEncoder().encode(user) {
-                                UserDefaults.standard.set(encoded, forKey: "user")
+                                if let encoded = try? JSONEncoder().encode(user) {
+                                    UserDefaults.standard.set(encoded, forKey: "user")
+                                }
                             }
                             for i in 0..<ops.all.count {
                                 if ops.all[i].id == id {
@@ -189,6 +216,7 @@ struct TransactionEditView: View {
                                 dismiss()
                             }
                         }
+                        .disabled(account == nil)
                     }
             }
             }
@@ -198,6 +226,6 @@ struct TransactionEditView: View {
 
 struct TransactionEditView_Previews: PreviewProvider {
     static var previews: some View {
-        TransactionEditView(user: User(), account: Account(bankName: "Tinkoff", balance: 17123, cashback: 12), ops: UserTransactions(), sumTotal: 13005, daysLeft: 30, id: UUID(), name: "Ozon", category: "Shop", writtenSum: 351, date: .now)
+        TransactionEditView(user: User(), opId: "test3", ops: UserTransactions(), sumTotal: 13005, daysLeft: 30, id: UUID(), name: "Ozon", category: "Shop", writtenSum: 351, date: .now)
     }
 }
