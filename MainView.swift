@@ -37,6 +37,8 @@ struct MainView: View {
     @StateObject var ops = UserTransactions()
     @State private var today = Date.now
     @State private var showPay = false
+    @State private var selectedTrans = Transaction(name: "", category: "", sum: 12, date: Date.now)
+    @State private var showTrans = false
     private var daysLeft: Int {
         let dT = today.get(.day)
         var dD = user.inflow?.get(.day) ?? 12
@@ -92,8 +94,12 @@ struct MainView: View {
         }
         return ans
     }
-    
+    private func handle(for data: Transaction) {
+        selectedTrans = data
+        showTrans.toggle()
+    }
     var body: some View {
+        let _ = self.selectedTrans
         ZStack {
             LinearGradient(colors: [.teal, .orange], startPoint: .topLeading, endPoint: .bottomTrailing)
                 .ignoresSafeArea()
@@ -129,6 +135,7 @@ struct MainView: View {
                         .padding()
                         .background(.regularMaterial)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .padding(.horizontal, 8)
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 ForEach(user.wallet?.accounts ?? [Account]()) { bank in
@@ -202,22 +209,30 @@ struct MainView: View {
                                         .background(.regularMaterial)
                                         .foregroundColor(.green)
                                         .clipShape(RoundedRectangle(cornerRadius: 30))
-                                    VStack {
+                                    VStack(alignment: .leading) {
                                         Text(trans.name)
                                             .font(.title2.bold())
                                         Text(trans.category)
                                             .font(.headline)
+                                        if (trans.date.get(.day, .month, .year) == Date.now.get(.day, .month, .year)) {
+                                            Text(trans.date.formatted(date: .omitted, time: .shortened))
+                                        } else {
+                                            Text(trans.date.formatted(date: .abbreviated, time: .omitted))
+                                        }
                                     }
                                     Spacer()
                                     VStack {
                                         Text(trans.sum.show())
                                             .font(.title3.bold())
-                                        Text("+ \(trans.cashback?.show() ?? "N")")
                                     }
                                 }
                                 .padding()
                                 .background()
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .padding(.horizontal, 8)
+                                .onTapGesture {
+                                    handle(for: trans)
+                                }
                             }
                         }
                     }
@@ -226,12 +241,15 @@ struct MainView: View {
             .sheet(isPresented: $showPay) {
                 PayView(user: user, ops: ops, sum: total, sumCash: totalCash, daysLeft: daysLeft, account: user.wallet!.accounts[0])
             }
+            .sheet(isPresented: $showTrans) {
+                TransactionEditView(user: user, account: user.wallet!.accounts[0] ,ops: ops, sumTotal: total, daysLeft: daysLeft, id: selectedTrans.id, name: selectedTrans.name, category: selectedTrans.category, writtenSum: selectedTrans.sum, date: selectedTrans.date)
+            }
         }
     }
 }
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 36000, cashback: 1741)]), inflow: Date.now), ops: UserTransactions(all: [Transaction(name: "Пятерочка", category: "Supermarket", sum: 2124, date: Date.now, cashback: 10), Transaction(name: "Ozon", category: "Home", sum: 95, date: Date.now), Transaction(name: "Transfer", category: "Transitions", sum: 1000, date: Date.now)]))
+        MainView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 36000, cashback: 1741)]), inflow: Date.now), ops: UserTransactions(all: [Transaction(name: "Пятерочка", category: "Supermarket", sum: 2124, date: Date.now), Transaction(name: "Ozon", category: "Home", sum: 95, date: Date.now), Transaction(name: "Transfer", category: "Transitions", sum: 1000, date: Date.now)]))
     }
 }

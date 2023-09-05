@@ -17,6 +17,7 @@ struct TextFieldPro: UIViewRepresentable {
         self.numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .currency
         numberFormatter.maximumFractionDigits = 2
+        numberFormatter.maximumIntegerDigits = 9
         numberFormatter.currencyCode = "RUB"
         numberFormatter.currencySymbol = ""
         currencyField = UITextFieldPro(formatter: numberFormatter, value: value)

@@ -19,6 +19,9 @@ extension Date {
 
 extension Decimal {
     func show() -> String {
+        if Int(truncating: self * 100 as NSDecimalNumber) % 100 == 0 {
+            return self.formatted(.number.precision(.fractionLength(0)))
+        }
         return self.formatted(.number.precision(.fractionLength(1)))
     }
 }

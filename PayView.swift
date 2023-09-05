@@ -51,11 +51,19 @@ struct PayView: View {
                         }
                         Spacer()
                         VStack(alignment: .leading) {
-                            Text(sumLeft.show())
-                                .font(.largeTitle.bold())
-                                .foregroundColor(sumLeft < 0 ? .red : .primary)
-                            Text("-> \(sumCashLeft.show())")
-                                .font(.headline.bold())
+                            if selectedDate.get(.day, .month, .year) == Date.now.get(.day, .month, .year) {
+                                Text(sumLeft.show())
+                                    .font(.largeTitle.bold())
+                                    .foregroundColor(sumLeft < 0 ? .red : .primary)
+                                Text("-> \(sumCashLeft.show())")
+                                    .font(.headline.bold())
+                            } else {
+                                Text(reconsider.show())
+                                    .font(.largeTitle.bold())
+                                    .foregroundColor(reconsider < 0 ? .red : .primary)
+                                Text("new estimate for today")
+                                    .font(.headline.bold())
+                            }
                         }
                     }
                     .padding()
@@ -73,7 +81,7 @@ struct PayView: View {
                         }
                         .frame(height: 100)
                         .font(.largeTitle.bold())
-                        DatePicker("Transaction time", selection: $selectedDate)
+                        DatePicker("Purchase time", selection: $selectedDate)
                             .fontWeight(.bold)
                             .padding(10)
                             .overlay {
@@ -119,7 +127,7 @@ struct PayView: View {
                                 .foregroundColor(.red)
                                 .font(.title.bold())
                         }
-                        if sumLeft < 0 && reconsider > 0 {
+                        if sumLeft < 0 && reconsider > 0 && selectedDate.get(.day, .month, .year) == Date.now.get(.day, .month, .year)  {
                             Text("New goal: \(reconsider.show())")
                                 .foregroundColor(.red)
                                 .font(.title.bold())
@@ -160,6 +168,11 @@ struct PayView: View {
                                 if item.id == account.id {
                                     item.balance -= actualValue
                                 }
+                            }
+                            if let encoded = try? JSONEncoder().encode(user) {
+                                UserDefaults.standard.setValue(encoded, forKey: "user")
+                            } else {
+                                fatalError("Cannot encode user")
                             }
                             ops.all.append(Transaction(name: transactionName, category: cattegory, sum: actualValue, date: selectedDate))
                             ops.all.sort()
