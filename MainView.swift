@@ -239,7 +239,7 @@ struct MainView: View {
                 }
             }
             .sheet(isPresented: $showPay) {
-                PayView(user: user, ops: ops, sum: total, sumCash: totalCash, daysLeft: daysLeft, account: user.wallet!.accounts[0])
+                PayView(user: user, ops: ops, sum: total, sumCash: totalCash, daysLeft: daysLeft, accountId: user.wallet!.accounts[0].id)
             }
             .sheet(isPresented: $showTrans) {
                 TransactionEditView(user: user, opId: selectedTrans.transactionID ,ops: ops, sumTotal: total, daysLeft: daysLeft, id: selectedTrans.id, name: selectedTrans.name, category: selectedTrans.category, writtenSum: selectedTrans.sum, date: selectedTrans.date)

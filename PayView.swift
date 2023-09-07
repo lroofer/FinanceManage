@@ -23,7 +23,7 @@ struct PayView: View {
     var reconsider: Decimal {
         (sum - actualValue) / Decimal(daysLeft)
     }
-    @State var account: Account
+    @State var accountId: UUID
     @State private var selectedDate = Date.now
     @State private var valueSum = 0
     @State private var transactionName = "State shop"
@@ -110,7 +110,7 @@ struct PayView: View {
                         HStack {
                             Text("Account")
                             Spacer()
-                            Picker("Account", selection: $account) {
+                            Picker("Account", selection: $accountId) {
                                 ForEach(user.wallet!.accounts) { item in
                                     Text("\(item.bankName) \(item.balance.show())")
                                 }
@@ -166,12 +166,19 @@ struct PayView: View {
                                 errorMessage = "Can't be zero"
                                 return
                             }
-                            if account.balance < actualValue {
+                            var accountBalance: Decimal = 0
+                            for item in user.wallet!.accounts {
+                                if item.id == accountId {
+                                    accountBalance = item.balance
+                                    break
+                                }
+                            }
+                            if accountBalance < actualValue {
                                 errorMessage = "Not enough money on the balance of selected account"
                                 return
                             }
                             for item in user.wallet!.accounts {
-                                if item.id == account.id {
+                                if item.id == accountId {
                                     item.balance -= actualValue
                                     break
                                 }
@@ -181,7 +188,7 @@ struct PayView: View {
                             } else {
                                 fatalError("Cannot encode user")
                             }
-                            ops.all.append(Transaction(name: transactionName, category: cattegory, sum: actualValue, date: selectedDate, transactionID: account.id.uuidString))
+                            ops.all.append(Transaction(name: transactionName, category: cattegory, sum: actualValue, date: selectedDate, transactionID: accountId.uuidString))
                             ops.all.sort()
                             if let encoded = try? JSONEncoder().encode(ops.all) {
                                 UserDefaults.standard.setValue(encoded, forKey: "transactions")
@@ -202,6 +209,6 @@ struct PayView: View {
 
 struct PayView_Previews: PreviewProvider {
     static var previews: some View {
-        PayView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 13232, cashback: 123), Account(bankName: "Alfa", balance: 141000, cashback: 1221)]), inflow: Date.now), ops: UserTransactions(all: [Transaction]()), sum: 35007, sumCash: 2003, daysLeft: 30, account: Account(bankName: "Tinkoff", balance: 13232, cashback: 123))
+        PayView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 13232, cashback: 123), Account(bankName: "Alfa", balance: 141000, cashback: 1221)]), inflow: Date.now), ops: UserTransactions(all: [Transaction]()), sum: 35007, sumCash: 2003, daysLeft: 30, accountId: Account(bankName: "Tinkoff", balance: 13232, cashback: 123).id)
     }
 }
