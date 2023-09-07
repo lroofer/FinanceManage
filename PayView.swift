@@ -209,6 +209,6 @@ struct PayView: View {
 
 struct PayView_Previews: PreviewProvider {
     static var previews: some View {
-        PayView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 13232, cashback: 123), Account(bankName: "Alfa", balance: 141000, cashback: 1221)]), inflow: Date.now), ops: UserTransactions(all: [Transaction]()), sum: 35007, sumCash: 2003, daysLeft: 30, accountId: Account(bankName: "Tinkoff", balance: 13232, cashback: 123).id)
+        PayView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 13232, cashback: 123, accentColor: .init(stored: .yellow)), Account(bankName: "Alfa", balance: 141000, cashback: 1221, accentColor: .init(stored: .yellow))]), inflow: Date.now), ops: UserTransactions(all: [Transaction]()), sum: 35007, sumCash: 2003, daysLeft: 30, accountId: Account(bankName: "Tinkoff", balance: 13232, cashback: 123, accentColor: .init(stored: .blue)).id)
     }
 }

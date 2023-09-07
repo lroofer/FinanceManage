@@ -160,12 +160,15 @@ struct MainView: View {
                                         }
                                     }
                                     .frame(width: 180, height: 120)
-                                    .background(.thickMaterial)
+                                    .background(bank.accentColor.get().opacity(0.7))
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
                                     .padding(.leading, 8)
-                                    //.transition(.scale)
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(.primary.opacity(0.7), lineWidth: 2)
+                                            .padding(.leading, 8)
+                                    }
                                 }
-                                //.animation(.default, value: user.wallet!.accounts.count)
                                 Button {
                                     showAddAccount.toggle()
                                 } label: {
@@ -259,6 +262,6 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 36000, cashback: 1741)]), inflow: Date.now), ops: UserTransactions(all: [Transaction(name: "Пятерочка", category: "Supermarket", sum: 2124, date: Date.now, transactionID: "test1"), Transaction(name: "Ozon", category: "Home", sum: 95, date: Date.now, transactionID: "test2"), Transaction(name: "Transfer", category: "Transitions", sum: 1000, date: Date.now, transactionID: "test4")]))
+        MainView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 36000, cashback: 1741, accentColor: .init(stored: .green))]), inflow: Date.now), ops: UserTransactions(all: [Transaction(name: "Пятерочка", category: "Supermarket", sum: 2124, date: Date.now, transactionID: "test1"), Transaction(name: "Ozon", category: "Home", sum: 95, date: Date.now, transactionID: "test2"), Transaction(name: "Transfer", category: "Transitions", sum: 1000, date: Date.now, transactionID: "test4")]))
     }
 }

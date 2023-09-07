@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class Account: Codable, ObservableObject, Identifiable, Hashable {
     static func == (lhs: Account, rhs: Account) -> Bool {
@@ -21,15 +22,19 @@ class Account: Codable, ObservableObject, Identifiable, Hashable {
         case balance
         case cashback
         case id
+        case accentColor
     }
     var id: UUID
     @Published var bankName: String
     @Published var balance: Decimal
     @Published var cashback: Decimal
-    init(bankName: String, balance: Decimal, cashback: Decimal) {
+    @Published var accentColor: ColorEncode
+    
+    init(bankName: String, balance: Decimal, cashback: Decimal, accentColor: ColorEncode) {
         self.bankName = bankName
         self.balance = balance
         self.cashback = cashback
+        self.accentColor = accentColor
         self.id = UUID()
     }
     func encode(to encoder: Encoder) throws {
@@ -38,6 +43,7 @@ class Account: Codable, ObservableObject, Identifiable, Hashable {
         try container.encode(self.balance, forKey: .balance)
         try container.encode(self.cashback, forKey: .cashback)
         try container.encode(self.id, forKey: .id)
+        try container.encode(self.accentColor, forKey: .accentColor)
     }
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -45,5 +51,6 @@ class Account: Codable, ObservableObject, Identifiable, Hashable {
         try balance = container.decode(Decimal.self, forKey: .balance)
         try cashback = container.decode(Decimal.self, forKey: .cashback)
         try id = container.decode(UUID.self, forKey: .id)
+        try accentColor = container.decode(ColorEncode.self, forKey: .accentColor)
     }
 }

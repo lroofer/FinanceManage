@@ -106,7 +106,7 @@ struct TransactionEditView: View {
                                 .padding(8)
                                 .overlay {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .stroke(accountSum > 0 ? Color.blue.opacity(0.5) : Color.red.opacity(0.8), lineWidth: 2)
+                                        .stroke(accountSum > 0 ? account!.accentColor.get().opacity(0.5) : Color.red, lineWidth: 2)
                                 }
                                 .onTapGesture {
                                     alertMessage = "Can't change payment account yet"

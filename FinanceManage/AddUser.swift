@@ -8,12 +8,16 @@
 import SwiftUI
 
 struct AddUser: View {
+    @StateObject var wallet = Wallet(accounts: [Account(bankName: "", balance: 0, cashback: 0, accentColor: .init(stored: .red))])
+    @FocusState private var bankNameFocused: Bool
+    
     @ObservedObject var user: User
+    
     @Environment(\.dismiss) var dismiss
+    
     @State private var userName = ""
     @State private var refund = Date.now
-    @StateObject var wallet = Wallet(accounts: [Account(bankName: "", balance: 0, cashback: 0)])
-    @FocusState private var bankNameFocused: Bool
+    
     var body: some View {
         NavigationView {
             Form {
@@ -33,11 +37,28 @@ struct AddUser: View {
                                     .font(.body.bold())
                                 TextField("Cashback", value: account.cashback, format: .currency(code: Locale.current.identifier))
                             }
+                            HStack {
+                                Picker("Accent color", selection: account.accentColor.stored) {
+                                    ForEach(ColorEncode.DynamicColor.headerCases, id: \.self) { color in
+                                        HStack {
+                                            Text(color.name)
+                                            Spacer()
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .fill(ColorEncode.init(stored: color).get().opacity(0.7))
+                                                .frame(width: 20, height: 20)
+                                        }
+                                        .frame(width: 80)
+                                    }
+                                }
+                                .font(.body.bold())
+                                .pickerStyle(.navigationLink)
+                            }
+                            
                         }
                         .deleteDisabled(wallet.accounts.count < 2)
                     }
                     Button {
-                        wallet.accounts.append(Account(bankName: "", balance: 0, cashback: 0))
+                        wallet.accounts.append(Account(bankName: "", balance: 0, cashback: 0, accentColor: .init(stored: .red)))
                     } label: {
                         HStack {
                             Image(systemName: "plus.circle.fill")
@@ -81,6 +102,6 @@ struct AddUser: View {
 
 struct AddUser_Previews: PreviewProvider {
     static var previews: some View {
-        AddUser(user: User(), wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 1221, cashback: 212.31)]))
+        AddUser(wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 1221, cashback: 212.31, accentColor: .init(stored: .red))]), user: User())
     }
 }
