@@ -34,11 +34,15 @@ struct Tile: View {
 
 struct MainView: View {
     @ObservedObject var user: User
+    
     @StateObject var ops = UserTransactions()
+    
     @State private var today = Date.now
     @State private var showPay = false
     @State private var selectedTrans = Transaction(name: "", category: "", sum: 12, date: Date.now, transactionID: "test")
     @State private var showTrans = false
+    @State private var showAddAccount = false
+    
     private var daysLeft: Int {
         let dT = today.get(.day)
         var dD = user.inflow?.get(.day) ?? 12
@@ -159,9 +163,11 @@ struct MainView: View {
                                     .background(.thickMaterial)
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
                                     .padding(.leading, 8)
+                                    //.transition(.scale)
                                 }
+                                //.animation(.default, value: user.wallet!.accounts.count)
                                 Button {
-                                    
+                                    showAddAccount.toggle()
                                 } label: {
                                     Image(systemName: "plus")
                                         .resizable()
@@ -176,6 +182,9 @@ struct MainView: View {
                             
                         }
                         .padding(.vertical)
+                        .sheet(isPresented: $showAddAccount) {
+                            AddAccount(user: user)
+                        }
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack (spacing: 15) {
                                 Tile(first: "In \(daysLeft)", second: "day\(daysLeft == 1 ? "" : "s") is inflow")

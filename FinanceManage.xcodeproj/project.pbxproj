@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A27DE502AA6FDE300423C7A /* TransactionEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A27DE4F2AA6FDE300423C7A /* TransactionEditView.swift */; };
+		0A28FECF2AA9983600910887 /* AddAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A28FECE2AA9983600910887 /* AddAccount.swift */; };
 		0A76FC9C2AA0E55E00531047 /* FinanceManageApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FC9B2AA0E55E00531047 /* FinanceManageApp.swift */; };
 		0A76FC9E2AA0E55E00531047 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FC9D2AA0E55E00531047 /* ContentView.swift */; };
 		0A76FCA02AA0E56000531047 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A76FC9F2AA0E56000531047 /* Assets.xcassets */; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		0A27DE4F2AA6FDE300423C7A /* TransactionEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionEditView.swift; sourceTree = "<group>"; };
+		0A28FECE2AA9983600910887 /* AddAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAccount.swift; sourceTree = "<group>"; };
 		0A76FC982AA0E55E00531047 /* FinanceManage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinanceManage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A76FC9B2AA0E55E00531047 /* FinanceManageApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceManageApp.swift; sourceTree = "<group>"; };
 		0A76FC9D2AA0E55E00531047 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 				0A76FCC02AA6117500531047 /* CurrencyTextField */,
 				0A76FCB32AA3622100531047 /* Extensions.swift */,
 				0A76FCB12AA3534900531047 /* MainView.swift */,
+				0A28FECE2AA9983600910887 /* AddAccount.swift */,
 				0A76FCB72AA39EA100531047 /* PayView.swift */,
 				0A76FCB52AA371AE00531047 /* Transaction.swift */,
 				0A76FC9A2AA0E55E00531047 /* FinanceManage */,
@@ -183,6 +186,7 @@
 				0A76FC9E2AA0E55E00531047 /* ContentView.swift in Sources */,
 				0A76FCB82AA39EA100531047 /* PayView.swift in Sources */,
 				0A76FCB42AA3622100531047 /* Extensions.swift in Sources */,
+				0A28FECF2AA9983600910887 /* AddAccount.swift in Sources */,
 				0A27DE502AA6FDE300423C7A /* TransactionEditView.swift in Sources */,
 				0A76FC9C2AA0E55E00531047 /* FinanceManageApp.swift in Sources */,
 				0A76FCAA2AA0E58500531047 /* User.swift in Sources */,
