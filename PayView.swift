@@ -111,9 +111,15 @@ struct PayView: View {
                             Text("Account")
                             Spacer()
                             Picker("Account", selection: $account) {
-                                ForEach(user.wallet!.accounts, id: \.self) { item in
+                                ForEach(user.wallet!.accounts) { item in
                                     Text("\(item.bankName) \(item.balance.show())")
                                 }
+                            }
+                            .fontWeight(.bold)
+                            .padding(5)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.blue.opacity(0.5), lineWidth: 2)
                             }
                         }
                         .fontWeight(.bold)
@@ -180,8 +186,9 @@ struct PayView: View {
                             if let encoded = try? JSONEncoder().encode(ops.all) {
                                 UserDefaults.standard.setValue(encoded, forKey: "transactions")
                                 dismiss()
+                            } else {
+                                errorMessage = "Can't encode data"
                             }
-                            errorMessage = "Can't encode data"
                         }
                         .buttonStyle(.borderedProminent)
                     }

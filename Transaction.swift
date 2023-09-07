@@ -38,7 +38,6 @@ struct Transaction: Codable, Identifiable, Comparable {
     static func < (lhs: Transaction, rhs: Transaction) -> Bool {
         lhs.date > rhs.date
     }
-    
     static let categories = ["Shop", "Transition", "Home", "Commute", "Entertain"]
     var id = UUID()
     var name: String
