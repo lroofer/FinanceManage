@@ -94,6 +94,6 @@ struct InflowView: View {
 
 struct InflowView_Previews: PreviewProvider {
     static var previews: some View {
-        InflowView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 125000, cashback: 100, accentColor: .init(stored: .yellow)), Account(bankName: "Alfa", balance: 25000, cashback: 125, accentColor: .init(stored: .red))]), inflow: Date.now))
+        InflowView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 125000, cashback: 100, accentColor: .init(stored: .yellow)), Account(bankName: "Alfa", balance: 25000, cashback: 125, accentColor: .init(stored: .red))]), inflow: Date.now, auth: AuthData(password: 1234)))
     }
 }

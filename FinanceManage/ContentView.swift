@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Combine
+import LocalAuthentication
 
 struct ContentView: View {
     @StateObject private var user = User() {
@@ -17,17 +19,34 @@ struct ContentView: View {
     }
     @State private var userName = ""
     @State private var addUser = false
+    @State private var password = ""
+    @State private var isUnlocked = false
+    
     @StateObject private var wallet = Wallet()
+    
+    func auth() {
+        let context = LAContext()
+        var error: NSError?
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            let reason = "We need to lock your data"
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, error in
+                if success {
+                    isUnlocked = true
+                }
+            }
+        }
+    }
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
-                LinearGradient(colors: [.teal, .orange], startPoint: .topLeading, endPoint: .bottomTrailing)
+                LinearGradient(colors: [.teal, .mint], startPoint: .topLeading, endPoint: .bottomTrailing)
                     .ignoresSafeArea()
                 VStack(alignment: .leading) {
                     GeometryReader { geom in
                         VStack (alignment: .leading) {
                             if (user.name != nil) {
-                                NavigationLink(destination: MainView(user: user).navigationBarBackButtonHidden()) {
+                                VStack (alignment: .center) {
                                     VStack(spacing: 20) {
                                         Image(systemName: "person.fill")
                                             .resizable()
@@ -42,7 +61,32 @@ struct ContentView: View {
                                         if let encoded = try? JSONEncoder().encode(user) {
                                             UserDefaults.standard.set(encoded, forKey: "user")
                                         }
+                                        if user.auth.useBiometrics {
+                                            auth()
+                                        }
                                     }
+                                    VStack {
+                                        SecureField("Enter password", text: $password)
+                                            .keyboardType(.decimalPad)
+                                            .onReceive(Just(password)) { newValue in
+                                                let filtered = newValue.filter { "0123456789".contains($0) }
+                                                if filtered != newValue {
+                                                    self.password = filtered
+                                                }
+                                            }
+                                        Button("Sign in") {
+                                            if user.auth.auth(with: Int(password)!) {
+                                                isUnlocked = true
+                                            }
+                                        }
+                                        .disabled(password.count < 4 || password.count > 6)
+                                    }
+                                    .padding()
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(Color.secondary.opacity(0.5), lineWidth: 2)
+                                    }
+                                    .padding()
                                 }
                             } else {
                                 VStack(spacing: 20) {
@@ -69,6 +113,9 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Finance Control")
+            .navigationDestination(isPresented: $isUnlocked) {
+                MainView(user: user)
+            }
         }
     }
 }

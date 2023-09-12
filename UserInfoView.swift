@@ -45,6 +45,6 @@ struct UserInfoView: View {
 
 struct UserInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        UserInfoView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account]()), inflow: Date.now))
+        UserInfoView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account]()), inflow: Date.now, auth: AuthData(password: 1234)))
     }
 }

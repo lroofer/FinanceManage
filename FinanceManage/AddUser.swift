@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct AddUser: View {
     @StateObject var wallet = Wallet(accounts: [Account(bankName: "", balance: 0, cashback: 0, accentColor: .init(stored: .red))])
@@ -17,11 +18,27 @@ struct AddUser: View {
     
     @State private var userName = ""
     @State private var refund = Date.now
+    @State private var password = ""
+    @State private var useFaceID = false
     
     var body: some View {
         NavigationView {
             Form {
                 TextField("First name", text: $userName)
+                SecureField("Password", text: $password)
+                    .keyboardType(.decimalPad)
+                    .onReceive(Just(password)) { newValue in
+                        let filtered = newValue.filter { "0123456789".contains($0) }
+                        if filtered != newValue {
+                            self.password = filtered
+                        }
+                    }
+                if password.count < 4 || password.count > 6 {
+                    Text("Enter password: 4-6 numbers")
+                        .foregroundColor(.red)
+                } else {
+                    Toggle("Use Face ID or Touch ID", isOn: $useFaceID)
+                }
                 Section {
                     ForEach($wallet.accounts, editActions: .delete) { account in
                         VStack {
@@ -31,11 +48,13 @@ struct AddUser: View {
                                 Text("Balance:")
                                     .font(.body.bold())
                                 TextField("Balance", value: account.balance, format: .currency(code: Locale.current.identifier))
+                                    .keyboardType(.numberPad)
                             }
                             HStack {
                                 Text("Cashback:")
                                     .font(.body.bold())
                                 TextField("Cashback", value: account.cashback, format: .currency(code: Locale.current.identifier))
+                                    .keyboardType(.numberPad)
                             }
                             HStack {
                                 Picker("Accent color", selection: account.accentColor.stored) {
@@ -91,9 +110,11 @@ struct AddUser: View {
                         user.name = userName
                         user.wallet = wallet
                         user.inflow = refund
+                        user.auth = AuthData(password: Int(password)!)
+                        user.auth.useBiometrics = useFaceID
                         dismiss()
                     }
-                    .disabled(userName.isEmpty || wallet.accounts.count < 1 || wallet.accounts[0].bankName.isEmpty)
+                    .disabled(userName.isEmpty || wallet.accounts.count < 1 || wallet.accounts[0].bankName.isEmpty || password.count < 4 || password.count > 6)
                 }
             }
         }

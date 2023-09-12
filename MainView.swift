@@ -247,12 +247,13 @@ struct MainView: View {
             .sheet(isPresented: $shareShow) {
                 InflowView(user: user)
             }
+            .navigationBarBackButtonHidden()
         }
     }
 }
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 36000, cashback: 1741, accentColor: .init(stored: .green))]), inflow: Date.now), ops: UserTransactions(all: [Transaction(name: "Пятерочка", category: "Supermarket", sum: 2124, date: Date.now, transactionID: "test1"), Transaction(name: "Ozon", category: "Home", sum: 95, date: Date.now, transactionID: "test2"), Transaction(name: "Transfer", category: "Transitions", sum: 1000, date: Date.now, transactionID: "test4")]))
+        MainView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 36000, cashback: 1741, accentColor: .init(stored: .green))]), inflow: Date.now, auth: AuthData(password: 1234)), ops: UserTransactions(all: [Transaction(name: "Пятерочка", category: "Supermarket", sum: 2124, date: Date.now, transactionID: "test1"), Transaction(name: "Ozon", category: "Home", sum: 95, date: Date.now, transactionID: "test2"), Transaction(name: "Transfer", category: "Transitions", sum: 1000, date: Date.now, transactionID: "test4")]))
     }
 }

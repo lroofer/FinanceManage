@@ -104,6 +104,6 @@ struct AddAccount: View {
 
 struct AddAccount_Previews: PreviewProvider {
     static var previews: some View {
-        AddAccount(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 132500, cashback: 201, accentColor: .init(stored: .green))]), inflow: Date.now))
+        AddAccount(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 132500, cashback: 201, accentColor: .init(stored: .green))]), inflow: Date.now, auth: AuthData(password: 1234)))
     }
 }
