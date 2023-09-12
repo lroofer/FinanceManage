@@ -87,7 +87,7 @@ struct AddAccount: View {
                 }
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button("Done") {
-                        user.wallet!.accounts.append(Account(bankName: bankName, balance: actualBalanceInput, cashback: actualCashbackInput, accentColor: accentColor))
+                        user.wallet.accounts.append(Account(bankName: bankName, balance: actualBalanceInput, cashback: actualCashbackInput, accentColor: accentColor))
                         if let encoded = try? JSONEncoder().encode(user) {
                             UserDefaults.standard.set(encoded, forKey: "user")
                         }

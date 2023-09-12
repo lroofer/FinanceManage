@@ -23,12 +23,14 @@ struct PayView: View {
     var reconsider: Decimal {
         (sum - actualValue) / Decimal(daysLeft)
     }
+    
     @State var accountId: UUID
     @State private var selectedDate = Date.now
     @State private var valueSum = 0
     @State private var transactionName = "State shop"
     @State private var cattegory = Transaction.categories[0]
     @State private var errorMessage: String? = nil
+    
     private var actualValue: Decimal {
         Decimal(valueSum) / 100
     }
@@ -111,7 +113,7 @@ struct PayView: View {
                             Text("Account")
                             Spacer()
                             Picker("Account", selection: $accountId) {
-                                ForEach(user.wallet!.accounts) { item in
+                                ForEach(user.wallet.accounts) { item in
                                     Text("\(item.bankName) \(item.balance.show())")
                                 }
                             }
@@ -167,7 +169,7 @@ struct PayView: View {
                                 return
                             }
                             var accountBalance: Decimal = 0
-                            for item in user.wallet!.accounts {
+                            for item in user.wallet.accounts {
                                 if item.id == accountId {
                                     accountBalance = item.balance
                                     break
@@ -177,7 +179,7 @@ struct PayView: View {
                                 errorMessage = "Not enough money on the balance of selected account"
                                 return
                             }
-                            for item in user.wallet!.accounts {
+                            for item in user.wallet.accounts {
                                 if item.id == accountId {
                                     item.balance -= actualValue
                                     break
@@ -209,6 +211,6 @@ struct PayView: View {
 
 struct PayView_Previews: PreviewProvider {
     static var previews: some View {
-        PayView(user: User(name: "Yegor", wallet: Wallet(accounts: [Account(bankName: "Tinkoff", balance: 13232, cashback: 123, accentColor: .init(stored: .yellow)), Account(bankName: "Alfa", balance: 141000, cashback: 1221, accentColor: .init(stored: .yellow))]), inflow: Date.now), ops: UserTransactions(all: [Transaction]()), sum: 35007, sumCash: 2003, daysLeft: 30, accountId: Account(bankName: "Tinkoff", balance: 13232, cashback: 123, accentColor: .init(stored: .blue)).id)
+        Text("NO")
     }
 }

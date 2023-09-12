@@ -24,6 +24,8 @@
 		0A76FCB82AA39EA100531047 /* PayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FCB72AA39EA100531047 /* PayView.swift */; };
 		0A76FCBA2AA60ABB00531047 /* TextFieldPro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FCB92AA60ABB00531047 /* TextFieldPro.swift */; };
 		0A76FCBE2AA60F1F00531047 /* UITextFieldPro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76FCBD2AA60F1F00531047 /* UITextFieldPro.swift */; };
+		0AAE46C12AACCAB5001978D0 /* InflowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAE46C02AACCAB5001978D0 /* InflowView.swift */; };
+		0AAE46C32AACD97E001978D0 /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAE46C22AACD97E001978D0 /* UserInfoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,8 @@
 		0A76FCB72AA39EA100531047 /* PayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayView.swift; sourceTree = "<group>"; };
 		0A76FCB92AA60ABB00531047 /* TextFieldPro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldPro.swift; sourceTree = "<group>"; };
 		0A76FCBD2AA60F1F00531047 /* UITextFieldPro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldPro.swift; sourceTree = "<group>"; };
+		0AAE46C02AACCAB5001978D0 /* InflowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InflowView.swift; sourceTree = "<group>"; };
+		0AAE46C22AACD97E001978D0 /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,11 +65,13 @@
 		0A76FC8F2AA0E55E00531047 = {
 			isa = PBXGroup;
 			children = (
+				0AAE46C02AACCAB5001978D0 /* InflowView.swift */,
 				0A28FED22AA9A67C00910887 /* ColorEncode.swift */,
 				0A27DE4F2AA6FDE300423C7A /* TransactionEditView.swift */,
 				0A76FCC02AA6117500531047 /* CurrencyTextField */,
 				0A76FCB32AA3622100531047 /* Extensions.swift */,
 				0A76FCB12AA3534900531047 /* MainView.swift */,
+				0AAE46C22AACD97E001978D0 /* UserInfoView.swift */,
 				0A28FECE2AA9983600910887 /* AddAccount.swift */,
 				0A76FCB72AA39EA100531047 /* PayView.swift */,
 				0A76FCB52AA371AE00531047 /* Transaction.swift */,
@@ -189,6 +195,7 @@
 				0A76FC9E2AA0E55E00531047 /* ContentView.swift in Sources */,
 				0A76FCB82AA39EA100531047 /* PayView.swift in Sources */,
 				0A76FCB42AA3622100531047 /* Extensions.swift in Sources */,
+				0AAE46C12AACCAB5001978D0 /* InflowView.swift in Sources */,
 				0A28FECF2AA9983600910887 /* AddAccount.swift in Sources */,
 				0A27DE502AA6FDE300423C7A /* TransactionEditView.swift in Sources */,
 				0A76FC9C2AA0E55E00531047 /* FinanceManageApp.swift in Sources */,
@@ -198,6 +205,7 @@
 				0A76FCB02AA1D99700531047 /* Account.swift in Sources */,
 				0A76FCB62AA371AE00531047 /* Transaction.swift in Sources */,
 				0A76FCBA2AA60ABB00531047 /* TextFieldPro.swift in Sources */,
+				0AAE46C32AACD97E001978D0 /* UserInfoView.swift in Sources */,
 				0A76FCBE2AA60F1F00531047 /* UITextFieldPro.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

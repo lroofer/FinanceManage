@@ -36,26 +36,25 @@ struct MainView: View {
     @ObservedObject var user: User
     
     @StateObject var ops = UserTransactions()
-    
+    @StateObject var wallet = Wallet(accounts: [Account(bankName: "", balance: 0, cashback: 0, accentColor: .init(stored: .red))])
+
     @State private var today = Date.now
     @State private var showPay = false
     @State private var selectedTrans = Transaction(name: "", category: "", sum: 12, date: Date.now, transactionID: "test")
     @State private var showTrans = false
     @State private var showAddAccount = false
+    @State private var shareShow = false
     
     private var daysLeft: Int {
         let dT = today.get(.day)
-        var dD = user.inflow?.get(.day) ?? 12
+        var dD = user.inflow.get(.day)
         let dMonth = getDaysInMonth()
         dD = min(dD, dMonth)
         return (dT <= dD ? dD - dT + 1 : dMonth - dT + 1 + dD)
     }
     private var daily: Decimal {
         var sum: Decimal = 0
-        if user.wallet == nil {
-            return 143
-        }
-        for i in user.wallet!.accounts {
+        for i in user.wallet.accounts {
             sum += i.balance
         }
         return sum / Decimal(daysLeft)
@@ -63,37 +62,28 @@ struct MainView: View {
     
     private var dailyTop: Decimal {
         var sum: Decimal = 0
-        if user.wallet == nil {
-            return 143
-        }
-        for i in user.wallet!.accounts {
+        for i in user.wallet.accounts {
             sum += i.balance + i.cashback
         }
         return sum / Decimal(daysLeft)
     }
     private var total: Decimal {
         var sum: Decimal = 0
-        if user.wallet == nil {
-            return 143
-        }
-        for i in user.wallet!.accounts {
+        for i in user.wallet.accounts {
             sum += i.balance
         }
         return sum
     }
     private var totalCash: Decimal {
         var sum: Decimal = 0
-        if user.wallet == nil {
-            return 143
-        }
-        for i in user.wallet!.accounts {
+        for i in user.wallet.accounts {
             sum += i.cashback
         }
         return sum
     }
     private func getAccounts() -> [(String, Decimal)] {
         var ans = [(String, Decimal)]()
-        for i in user.wallet!.accounts {
+        for i in user.wallet.accounts {
             ans.append((i.bankName, i.balance))
         }
         return ans
@@ -105,7 +95,7 @@ struct MainView: View {
     var body: some View {
         let _ = self.selectedTrans
         ZStack {
-            LinearGradient(colors: [.teal, .orange], startPoint: .topLeading, endPoint: .bottomTrailing)
+            LinearGradient(colors: [.teal, .mint], startPoint: .topLeading, endPoint: .bottomTrailing)
                 .ignoresSafeArea()
             GeometryReader { geom in
                 ScrollView (showsIndicators: true) {
@@ -126,9 +116,7 @@ struct MainView: View {
                                 .font(.body)
                             }
                             Spacer()
-                            Button {
-                                
-                            } label: {
+                            NavigationLink(destination: UserInfoView(user: user)) {
                                 VStack(spacing: 10) {
                                     Image(systemName: "person")
                                     Text(user.name ?? "Yegor")
@@ -142,25 +130,25 @@ struct MainView: View {
                         .padding(.horizontal, 8)
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                ForEach(user.wallet?.accounts ?? [Account]()) { bank in
+                                ForEach($user.wallet.accounts) { account in
                                     VStack(alignment: .leading) {
-                                        Text(bank.bankName)
+                                        Text(account.bankName.wrappedValue)
                                             .font(.title2.bold())
                                         HStack (spacing: 3) {
-                                            Text("\(bank.balance.show())")
+                                            Text("\(account.balance.wrappedValue.show())")
                                                 .font(.headline)
                                             Image(systemName: "rublesign")
                                                 .font(.subheadline)
                                         }
                                         HStack (spacing: 1) {
-                                            Text("+ \(bank.cashback.show())")
+                                            Text("+ \(account.cashback.wrappedValue.show())")
                                                 .font(.subheadline)
                                             Image(systemName: "rublesign")
                                                 .font(.caption)
                                         }
                                     }
                                     .frame(width: 180, height: 120)
-                                    .background(bank.accentColor.get().opacity(0.7))
+                                    .background(account.accentColor.wrappedValue.get().opacity(0.7))
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
                                     .padding(.leading, 8)
                                     .overlay {
@@ -200,9 +188,9 @@ struct MainView: View {
                         .padding(.bottom)
                         HStack (spacing: 15) {
                             Button {
-                                
+                                shareShow.toggle()
                             } label: {
-                                Tile(first: "Share", second: "in")
+                                Tile(first: "Inflow", second: "in")
                             }
                             Button {
                                 showPay.toggle()
@@ -251,10 +239,13 @@ struct MainView: View {
                 }
             }
             .sheet(isPresented: $showPay) {
-                PayView(user: user, ops: ops, sum: total, sumCash: totalCash, daysLeft: daysLeft, accountId: user.wallet!.accounts[0].id)
+                PayView(user: user, ops: ops, sum: total, sumCash: totalCash, daysLeft: daysLeft, accountId: user.wallet.accounts[0].id)
             }
             .sheet(isPresented: $showTrans) {
                 TransactionEditView(user: user, opId: selectedTrans.transactionID ,ops: ops, sumTotal: total, daysLeft: daysLeft, id: selectedTrans.id, name: selectedTrans.name, category: selectedTrans.category, writtenSum: selectedTrans.sum, date: selectedTrans.date)
+            }
+            .sheet(isPresented: $shareShow) {
+                InflowView(user: user)
             }
         }
     }

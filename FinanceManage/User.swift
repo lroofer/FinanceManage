@@ -15,9 +15,9 @@ class User: Codable, ObservableObject {
     }
     
     @Published var name: String?
-    @Published var wallet: Wallet?
-    @Published var inflow: Date?
-    init(name: String, wallet: Wallet, inflow: Date?) {
+    @Published var wallet: Wallet
+    @Published var inflow: Date
+    init(name: String?, wallet: Wallet, inflow: Date) {
         self.name = name
         self.wallet = wallet
         self.inflow = inflow
@@ -32,8 +32,8 @@ class User: Codable, ObservableObject {
             }
         }
         self.name = nil
-        self.inflow = nil
-        self.wallet = nil
+        self.inflow = Date.now
+        self.wallet = Wallet()
     }
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

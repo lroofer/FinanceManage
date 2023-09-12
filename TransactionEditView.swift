@@ -40,7 +40,7 @@ struct TransactionEditView: View {
         self.daysLeft = daysLeft
         self.id = id
         self.opId = opId
-        for i in user.wallet!.accounts {
+        for i in user.wallet.accounts {
             if i.id.uuidString == opId {
                 _account = State(initialValue: i)
             }
@@ -145,9 +145,9 @@ struct TransactionEditView: View {
                             }
                             ops.all.sort()
                             if account != nil {
-                                for i in 0..<user.wallet!.accounts.count {
-                                    if user.wallet!.accounts[i].id == account!.id {
-                                        user.wallet!.accounts[i].balance += initialValue
+                                for i in 0..<user.wallet.accounts.count {
+                                    if user.wallet.accounts[i].id == account!.id {
+                                        user.wallet.accounts[i].balance += initialValue
                                     }
                                 }
                                 if let encoded = try? JSONEncoder().encode(user) {
@@ -193,9 +193,9 @@ struct TransactionEditView: View {
                                 return
                             }
                             if account != nil {
-                                for i in 0..<user.wallet!.accounts.count {
-                                    if user.wallet!.accounts[i].id == account!.id {
-                                        user.wallet!.accounts[i].balance = accountSum
+                                for i in 0..<user.wallet.accounts.count {
+                                    if user.wallet.accounts[i].id == account!.id {
+                                        user.wallet.accounts[i].balance = accountSum
                                     }
                                 }
                                 if let encoded = try? JSONEncoder().encode(user) {
